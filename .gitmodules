@@ -1,0 +1,10 @@
+[submodule "godot-cpp"]
+	path = external/godot-cpp
+	url = https://github.com/godotengine/godot-cpp
+	branch = 4.2
+[submodule "MAVSDK"]
+	path = external/MAVSDK
+	url = https://github.com/mavlink/MAVSDK.git
+[submodule "jsbsim"]
+	path = external/jsbsim
+	url = https://github.com/JSBSim-Team/jsbsim.git
