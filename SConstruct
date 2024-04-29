@@ -11,14 +11,15 @@ env = SConscript("external/godot-cpp/SConstruct")
 # - LINKFLAGS are for linking flags
 
 inc_dirs = ["src",
-            "external/MAVSDK/install/include",
-            "external/MAVSDK/install/include/mavsdk",
+            "external/MAVSDK/build/install/include",
+            "external/MAVSDK/build/install/include/mavsdk",
             "external/jsbsim/build/install/include/JSBSim"]
 
-lib_dirs = ["external/MAVSDK/install/lib",
+lib_dirs = ["external/MAVSDK/build/install/lib",
+            "external/MAVSDK/build/install/lib64",
             "external/jsbsim/build/install/lib"]
 
-libs = ["libmavsdk", "libjsbsim"]
+libs = ["libmavsdk", "libJSBSim"]
 
 env.Append(CPPPATH=inc_dirs)
 env.Append(LIBPATH=lib_dirs)

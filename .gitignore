@@ -4,3 +4,4 @@ compile_commands.json
 .DS_Store
 .sconsign.dblite
 extension_api.json
+project/addons/rotasim/bin

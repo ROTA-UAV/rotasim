@@ -4,14 +4,13 @@ rotasim is a simulator with a focus on UAV testing and development.
 # How to build
 JSBSim:
 ```
-mkdir build
-cd build
-cmake -DCMAKE_CXX_FLAGS_RELEASE="-O3 -march=native -mtune=native" -DCMAKE_C_FLAGS_RELEASE="-O3 -march=native -mtune=native" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=install ..
-make
-make install
+cmake -DCMAKE_CXX_FLAGS_RELEASE="-O3 -march=native -mtune=native" -DCMAKE_C_FLAGS_RELEASE="-O3 -march=native -mtune=native" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=build/install -Bbuild -S.
+cmake --build build --config Release
+cmake --install build
 ```
 MAVSDK
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=install -Bbuild/default -H.
-cmake --build build/default --config Release -j8
+cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=build/install -Bbuild -S.
+cmake --build build --config Release
+cmake --install build
 ```
