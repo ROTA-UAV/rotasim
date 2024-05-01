@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "scons platform=macos target=template_debug debug_symbols=yes -j8"
+            "command": "scons target=template_debug debug_symbols=true dev_build=yes"
         }
     ]
 }

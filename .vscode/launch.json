@@ -9,8 +9,8 @@
             "request": "launch",
             "name": "Launch",
             "preLaunchTask": "build",
-            "program": "/opt/homebrew/bin/godot",
-            "args": ["--path", "${workspaceFolder}/project", "${workspaceFolder}/project/project.godot"],
+            "program": "godot",
+            "args": [""],
             "cwd": "${workspaceFolder}/project",
             "console": "internalConsole"
         }
