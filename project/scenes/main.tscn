@@ -38,8 +38,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.152, 2.08165e
 mesh = SubResource("PlaneMesh_vd0ov")
 
 [node name="Rascal110" parent="." instance=ExtResource("2_8ke5e")]
-
-[node name="FDM" type="FDM" parent="."]
-
-[node name="Link" type="Link" parent="."]
-fdm_node = NodePath("../Rascal110")

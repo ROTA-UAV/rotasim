@@ -1,5 +1,4 @@
-#ifndef FDM_H
-#define FDM_H
+#pragma once
 
 #include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/variant/string.hpp>
@@ -17,8 +16,8 @@ public:
 
   std::shared_ptr<JSBSim::FGFDMExec> get_fdm_exec() const;
 
+  void _ready() override;
   void _physics_process(double delta) override;
-  void _enter_tree() override;
 
   double get_frequency() const;
   void set_frequency(double p_frequency);
@@ -63,5 +62,3 @@ protected:
 };
 
 } // namespace godot
-
-#endif

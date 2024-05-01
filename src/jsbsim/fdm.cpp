@@ -65,9 +65,10 @@ void FDM::_bind_methods() {
                         "set_input_throttle", "get_input_throttle");
 }
 
-FDM::FDM() : fdm_exec(nullptr), model_name(""), initialized(false), frequency(250.0) {}
+FDM::FDM() : fdm_exec(nullptr), model_name(""), initialized(false), frequency(250.0),
+             input_aileron(0.0), input_elevator(0.0), input_rudder(0.0), input_throttle(0.0) {}
 
-void FDM::_enter_tree() {
+void FDM::_ready() {
   if (Engine::get_singleton()->is_editor_hint()) {
     return;
   }
