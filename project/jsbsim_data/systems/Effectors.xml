@@ -59,7 +59,7 @@
 
     <actuator name="Motor">
       <input> fcs/cmdPower_nd </input>
-      <delay> 0.0205 </delay>
+      <delay> 0.025 </delay>
       <clipto>
         <min>0.01</min> <!-- Min command shouldn't be zero, commands would be stuck at zero -->
         <max>1.0</max>

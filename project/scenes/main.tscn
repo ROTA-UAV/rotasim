@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://sgtpkwtechta"]
+[gd_scene load_steps=9 format=3 uid="uid://sgtpkwtechta"]
 
 [ext_resource type="PackedScene" uid="uid://vvbh0i4qlpw5" path="res://scenes/Rascal110.tscn" id="2_8ke5e"]
 [ext_resource type="Texture2D" uid="uid://bftww4g0gtb2m" path="res://addons/godot-prototype-texture/PNG/checker_lime_512x512.png" id="2_frstp"]
+[ext_resource type="Script" path="res://scripts/Controller.gd" id="3_kdgam"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nn1sx"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -38,3 +39,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.152, 2.08165e
 mesh = SubResource("PlaneMesh_vd0ov")
 
 [node name="Rascal110" parent="." instance=ExtResource("2_8ke5e")]
+script = ExtResource("3_kdgam")
+
+[node name="Link" type="Link" parent="."]
+fdm_node = NodePath("../Rascal110")

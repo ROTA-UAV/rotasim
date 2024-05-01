@@ -102,7 +102,7 @@ void FDM::_ready() {
   Engine::get_singleton()->set_physics_ticks_per_second(frequency);
   fdm_exec->Setdt(1.0 / frequency);
 
-  fdm_exec->GetIC()->Load(SGPath("reset00.xml"));
+  fdm_exec->GetIC()->Load(SGPath("initGrnd.xml"));
   fdm_exec->RunIC();
 
   copy_from_jsbsim();
@@ -122,7 +122,9 @@ void FDM::_physics_process(double delta) {
   }
 
   copy_to_jsbsim(delta);
+  // UtilityFunctions::print("Input: ", fdm_exec->GetPropertyValue("fcs/throttle-input"));
   fdm_exec->Run();
+  // UtilityFunctions::print("Output: ", fdm_exec->GetPropertyValue("fcs/throttle-cmd-norm"));
   copy_from_jsbsim();
 }
 
