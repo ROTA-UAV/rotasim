@@ -5,3 +5,6 @@ compile_commands.json
 .sconsign.dblite
 extension_api.json
 project/addons/rotasim/bin
+*.png
+*.import
+*.glb
