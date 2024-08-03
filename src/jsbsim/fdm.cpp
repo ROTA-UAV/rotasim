@@ -29,12 +29,26 @@ void FDM::_bind_methods() {
   ClassDB::add_property("FDM", PropertyInfo(Variant::STRING, "model_name"),
                         "set_model_name", "get_model_name");
 
+  // init name
+  ClassDB::bind_method(D_METHOD("get_init_name"), &FDM::get_init_name);
+  ClassDB::bind_method(D_METHOD("set_init_name", "p_init_name"),
+                       &FDM::set_init_name);
+  ClassDB::add_property("FDM", PropertyInfo(Variant::STRING, "init_name"),
+                        "set_init_name", "get_init_name");
+
   // frequency
   ClassDB::bind_method(D_METHOD("get_frequency"), &FDM::get_frequency);
   ClassDB::bind_method(D_METHOD("set_frequency", "p_frequency"),
                        &FDM::set_frequency);
   ClassDB::add_property("FDM", PropertyInfo(Variant::FLOAT, "frequency"),
                         "set_frequency", "get_frequency");
+
+  // speed
+  ClassDB::bind_method(D_METHOD("get_speed"), &FDM::get_speed);
+  ClassDB::bind_method(D_METHOD("set_speed", "p_speed"),
+                       &FDM::set_speed);
+  ClassDB::add_property("FDM", PropertyInfo(Variant::FLOAT, "speed"),
+                        "set_speed", "get_speed");
 
   // aileron input
   ClassDB::bind_method(D_METHOD("get_input_aileron"), &FDM::get_input_aileron);
@@ -65,10 +79,7 @@ void FDM::_bind_methods() {
                         "set_input_throttle", "get_input_throttle");
 }
 
-FDM::FDM() : fdm_exec(nullptr), model_name(""), initialized(false), frequency(250.0),
-             input_aileron(0.0), input_elevator(0.0), input_rudder(0.0), input_throttle(0.0) {}
-
-void FDM::_ready() {
+void FDM::_enter_tree() {
   if (Engine::get_singleton()->is_editor_hint()) {
     return;
   }
@@ -86,6 +97,7 @@ void FDM::_ready() {
   fdm_exec->SetAircraftPath(SGPath("aircraft"));
   fdm_exec->SetEnginePath(SGPath("engine"));
   fdm_exec->SetSystemsPath(SGPath("systems"));
+  fdm_exec->DisableOutput();
 
   bool result = fdm_exec->LoadModel(
     SGPath("aircraft"),
@@ -98,19 +110,23 @@ void FDM::_ready() {
   }
 
   // this node uses godot's _physics_process method to update the simulation
-  Engine::get_singleton()->set_max_physics_steps_per_frame(INT32_MAX);
-  Engine::get_singleton()->set_physics_ticks_per_second(frequency);
+  // Engine::get_singleton()->set_max_physics_steps_per_frame(INT32_MAX);
+  // Engine::get_singleton()->set_physics_ticks_per_second(frequency);
   fdm_exec->Setdt(1.0 / frequency);
 
-  fdm_exec->GetIC()->Load(SGPath("initGrnd.xml"));
+  fdm_exec->GetIC()->Load(utils::jsb_path_from_gd_string(init_name));
   fdm_exec->RunIC();
 
+  // run the simulation for 10 seconds to stabilize it
+  // copy_to_jsbsim();
+  // for (uint64_t steps = 10.0 / fdm_exec->GetDeltaT(); steps > 0; --steps) {
+  //   fdm_exec->Run();
+  // }
   copy_from_jsbsim();
+
   initial_location = get_aircraft_location();
   initialized = true;
 }
-
-FDM::~FDM() {}
 
 void FDM::_physics_process(double delta) {
   if (Engine::get_singleton()->is_editor_hint()) {
@@ -121,18 +137,22 @@ void FDM::_physics_process(double delta) {
     return;
   }
 
-  copy_to_jsbsim(delta);
-  // UtilityFunctions::print("Input: ", fdm_exec->GetPropertyValue("fcs/throttle-input"));
-  fdm_exec->Run();
-  // UtilityFunctions::print("Output: ", fdm_exec->GetPropertyValue("fcs/throttle-cmd-norm"));
-  copy_from_jsbsim();
+  uint32_t ticks_per_second = Engine::get_singleton()->get_physics_ticks_per_second();
+  // divide number of sim runs in a second by the number of ticks per second to get the number of runs per tick
+  num_of_runs += (frequency / static_cast<double>(ticks_per_second)) * speed;
+
+  for (;num_of_runs > 0.0; num_of_runs -= 1.0) {
+    copy_to_jsbsim();
+    fdm_exec->Run();
+    copy_from_jsbsim();
+  }
 }
 
-void FDM::copy_to_jsbsim(double delta) {
-  fdm_exec->GetFCS()->SetDaCmd(input_aileron);
-  fdm_exec->GetFCS()->SetDeCmd(input_elevator);
-  fdm_exec->GetFCS()->SetDrCmd(input_rudder);
-  fdm_exec->SetPropertyValue("fcs/throttle-input", input_throttle);
+void FDM::copy_to_jsbsim() {
+  fdm_exec->SetPropertyValue("fcs/aileron-cmd-norm", input_aileron);
+  fdm_exec->SetPropertyValue("fcs/elevator-cmd-norm", input_elevator);
+  fdm_exec->SetPropertyValue("fcs/rudder-cmd-norm", input_rudder);
+  fdm_exec->SetPropertyValue("fcs/throttle-cmd-norm", input_throttle);
 
   // UtilityFunctions::print("Aileron: ", input_aileron);
   // UtilityFunctions::print("Elevator: ", input_elevator);
@@ -149,6 +169,8 @@ void FDM::copy_from_jsbsim() {
   // use initial location as starting point
   JSBSim::FGColumnVector3 location_dt = initial_location.LocationToLocal(get_aircraft_location());
   set_position(utils::godot_vec_from_jsb_vec(utils::feet_to_meters_vec(location_dt)));
+
+  // UtilityFunctions::print(std::to_string(fdm_exec->GetSimTime()).c_str(), ",", std::to_string(fdm_exec->GetAuxiliary()->GetNz()).c_str());
 }
 
 std::shared_ptr<JSBSim::FGFDMExec> FDM::get_fdm_exec() const { return fdm_exec; }
@@ -162,9 +184,19 @@ void FDM::set_frequency(double p_frequency) {
   frequency = p_frequency;
 }
 
+double FDM::get_speed() const { return speed; }
+void FDM::set_speed(double p_speed) {
+  speed = p_speed;
+}
+
 String FDM::get_model_name() const { return model_name; }
 void FDM::set_model_name(const String &p_model_name) {
   model_name = p_model_name;
+}
+
+String FDM::get_init_name() const { return init_name; }
+void FDM::set_init_name(const String &p_init_name) {
+  init_name = p_init_name;
 }
 
 double FDM::get_input_aileron() const { return input_aileron; }

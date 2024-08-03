@@ -1,11 +1,18 @@
 <?xml version="1.0"?>
-<initialize name="UMore Park Ground">
-  <vt unit="M/S">         0.0       </vt>
-  <latitude type="geodetic" unit="DEG">   44.725801 </latitude>
-  <longitude unit="DEG"> -93.075866 </longitude>
-  <altitude unit="M">     0.0       </altitude>
-  <elevation unit="M">    0.0       </elevation>
-  <!-- <altitude unit="M">     285.2111       </altitude>
-  <elevation unit="M">    285.2111       </elevation> -->
-  <psi unit="DEG">        90.0      </psi>
+<initialize name="reset00">
+  <!--
+    This file sets up the aircraft to start off
+    from the runway in preparation for takeoff.
+  -->
+  <ubody unit="FT/SEC">    0.0  </ubody>
+  <vbody unit="FT/SEC">    0.0  </vbody>
+  <wbody unit="FT/SEC">    0.0  </wbody>
+  <longitude unit="DEG">   29.012039  </longitude>
+  <latitude unit="DEG">    40.233301   </latitude>
+  <phi unit="DEG">         0.0  </phi>
+  <theta unit="DEG">       0.0  </theta>
+  <psi unit="DEG">         270.0  </psi>
+  <altitude unit="FT">     0.15  </altitude>
+  <elevation unit="FT">    0.0  </elevation>
+  <hwind> 0.0 </hwind>
 </initialize>

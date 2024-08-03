@@ -160,7 +160,7 @@
         <summer>
             <input>fcs/throttle-cmd-norm</input>
             <input>fcs/cmdMotor_ext_nd</input>
-            <output>fcs/throttle-pos-norm</output>
+            <output>fcs/cmdMotor</output>
         </summer>
     </channel>
 </flight_control>

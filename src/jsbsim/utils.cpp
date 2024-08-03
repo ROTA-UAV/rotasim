@@ -27,18 +27,15 @@ double utils::nanotesla_to_gauss(double nt) {
 }
 
 double utils::wrap_pi(double rad) {
-    while (rad > M_PI) {
-        rad -= 2.0 * M_PI;
-    }
-    while (rad < -M_PI) {
+    rad = std::fmod(rad, 2.0 * M_PI);
+    if (rad < 0.0)
         rad += 2.0 * M_PI;
-    }
     return rad;
 }
 
 double utils::wrap_pi_deg(double deg) {
-    while (deg < 0.0) {
+    deg = std::fmod(deg, 360.0);
+    if (deg < 0.0)
         deg += 360.0;
-    }
     return deg;
 }

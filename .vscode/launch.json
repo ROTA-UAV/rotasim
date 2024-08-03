@@ -8,7 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "dev-build",
             "program": "godot",
             "args": [""],
             "cwd": "${workspaceFolder}/project",

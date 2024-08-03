@@ -4,9 +4,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "dev-build",
             "type": "shell",
             "command": "scons target=template_debug debug_symbols=true dev_build=yes"
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "scons"
         }
     ]
 }

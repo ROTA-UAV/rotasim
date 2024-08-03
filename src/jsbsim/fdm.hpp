@@ -11,19 +11,24 @@ class FDM : public Node3D {
   GDCLASS(FDM, Node3D)
 
 public:
-  FDM();
-  ~FDM();
+  FDM() = default;
 
   std::shared_ptr<JSBSim::FGFDMExec> get_fdm_exec() const;
 
-  void _ready() override;
+  void _enter_tree() override;
   void _physics_process(double delta) override;
 
   double get_frequency() const;
   void set_frequency(double p_frequency);
 
+  double get_speed() const;
+  void set_speed(double p_speed);
+
   String get_model_name() const;
   void set_model_name(const String &p_model_name);
+
+  String get_init_name() const;
+  void set_init_name(const String &p_init_name);
 
   double get_input_aileron() const;
   void set_input_aileron(double p_input_aileron);
@@ -41,20 +46,23 @@ public:
   void set_responsiveness(double p_responsiveness);
 
 private:
-  std::shared_ptr<JSBSim::FGFDMExec> fdm_exec;
-  String model_name;
-  bool initialized;
-  JSBSim::FGLocation initial_location;
+  std::shared_ptr<JSBSim::FGFDMExec> fdm_exec{};
+  String model_name{};
+  String init_name{};
+  bool initialized{false};
+  JSBSim::FGLocation initial_location{};
 
-  double frequency;
+  double frequency{1000.0};
+  double speed{1.0};
+  double num_of_runs{};
 
-  double input_aileron;
-  double input_elevator;
-  double input_rudder;
-  double input_throttle;
+  double input_aileron{};
+  double input_elevator{};
+  double input_rudder{};
+  double input_throttle{};
 
   void copy_from_jsbsim();
-  void copy_to_jsbsim(double delta);
+  void copy_to_jsbsim();
   JSBSim::FGLocation get_aircraft_location() const;
 
 protected:

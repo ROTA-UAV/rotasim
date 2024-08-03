@@ -1,20 +1,29 @@
 [gd_scene load_steps=3 format=3 uid="uid://vvbh0i4qlpw5"]
 
-[ext_resource type="PackedScene" uid="uid://c10dy7x61b0vv" path="res://cessna172.fbx" id="2_lbcmr"]
+[ext_resource type="PackedScene" uid="uid://cgejd412bxd7l" path="res://scenes/talon.glb" id="1_6jvw8"]
+[ext_resource type="Script" path="res://addons/orbit_camera/orbit_camera.gd" id="2_unu5c"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_cbou2"]
-size = Vector3(2.794, 1, 1.924)
+[node name="Talon" type="FDM"]
+model_name = "Talon"
+init_name = "initGrnd.xml"
 
-[node name="Rascal110" type="FDM"]
-model_name = "Rascal110"
+[node name="CameraAnchor" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.825389, 0.564564, 0, -0.564564, 0.825389, 0, 1.91412, 3.5086)
 
-[node name="Model" parent="." instance=ExtResource("2_lbcmr")]
-transform = Transform3D(-0.59, -8.0688e-09, -5.09444e-08, 2.03251e-16, 0.582736, -0.0922963, 5.15794e-08, -0.0922963, -0.582736, 2.08165e-12, -0.263193, 0.241964)
+[node name="OrbitCamera" type="Camera3D" parent="CameraAnchor"]
+current = true
+script = ExtResource("2_unu5c")
+DEFAULT_DISTANCE = 4.0
+ROTATE_SPEED = 0.1
+ANCHOR_NODE_PATH = NodePath("..")
+
+[node name="talon2" parent="." instance=ExtResource("1_6jvw8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.144174, 0)
+
+[node name="Link" type="Link" parent="."]
+fdm_node = NodePath("..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.989054, -0.0467094, 0.139965, 0, 0.948573, 0.31656, -0.147553, -0.313095, 0.93819, 0.471943, 1.22656, 2.78838)
-
-[node name="SizeBox" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, -4.03349e-16, 3.44493e-16, 3.44493e-16, 0.987688, 0.156434, -4.03349e-16, -0.156434, 0.987688, 0, 0.10303, 0.454043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.204295, -0.492756)
 visible = false
-mesh = SubResource("BoxMesh_cbou2")
+fov = 66.0

@@ -57,14 +57,13 @@
       </function>
     </fcs_function>
 
-    <actuator name="Motor">
-      <input> fcs/cmdPower_nd </input>
-      <delay> 0.025 </delay>
+    <actuator name="fcs/throttle-cmd-norm">
+      <input> fcs/throttle-input </input>
+      <delay> 0.0205 </delay>
       <clipto>
         <min>0.01</min> <!-- Min command shouldn't be zero, commands would be stuck at zero -->
         <max>1.0</max>
       </clipto>
-      <output> fcs/throttle-cmd-norm </output>
     </actuator>
   </channel>
 </system>

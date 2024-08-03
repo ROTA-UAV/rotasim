@@ -29,17 +29,21 @@ protected:
     static void _bind_methods();
 
 private:
-    static constexpr const char* address = "*";
-    static constexpr const uint16_t port = 4560; // px4 sitl connects on this port
-    static constexpr uint8_t system_id = 1;
-    static constexpr uint8_t component_id = 200;
+    static constexpr const char* address{"*"};
+    static constexpr uint8_t system_id{1};
+    static constexpr uint8_t component_id{200};
 
-    Ref<TCPServer> server;
-    Ref<StreamPeerTCP> autopilot;
+    // px4_sitl looks for ports starting with this and increments it for every instance
+    static constexpr uint16_t default_port{4560};
+    static uint16_t port_counter;
+    uint16_t port{};
 
-    NodePath fdm_path;
-    std::shared_ptr<JSBSim::FGFDMExec> fdm;
-    FDM* fdm_node;
+    Ref<TCPServer> server{};
+    Ref<StreamPeerTCP> autopilot{};
+
+    NodePath fdm_path{};
+    std::shared_ptr<JSBSim::FGFDMExec> fdm{};
+    FDM* fdm_node{};
 
     void send_data() const;
     void send_gps_data() const;

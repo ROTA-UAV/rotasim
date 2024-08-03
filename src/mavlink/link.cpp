@@ -25,8 +25,9 @@ void Link::_bind_methods() {
                           "set_fdm_path", "get_fdm_path");
 }
 
-Link::Link() : fdm_path(""), fdm(nullptr) {}
+uint16_t Link::port_counter = Link::default_port;
 
+Link::Link() {}
 Link::~Link() {}
 
 void Link::_ready() {
@@ -34,17 +35,25 @@ void Link::_ready() {
         return;
     }
 
+    if (fdm_path.is_empty()) {
+        UtilityFunctions::printerr("FDM path not set.");
+        set_process_mode(ProcessMode::PROCESS_MODE_DISABLED);
+        return;
+    }
+
     // get reference to jsbsim fdm
     Node* node = get_node_or_null(fdm_path); // get_node didn't work
     if (node == nullptr) {
-        UtilityFunctions::printerr("FDM node not found.");
-        set_process_mode(Node::PROCESS_MODE_DISABLED);
+        UtilityFunctions::printerr("Failed to find FDM node.");
+        set_process_mode(ProcessMode::PROCESS_MODE_DISABLED);
         return;
     }
+
     fdm_node = Object::cast_to<FDM>(node);
     fdm = fdm_node->get_fdm_exec();
 
     // create server
+    port = port_counter++;
     server.instantiate();
     server->listen(port, address);
 }
@@ -61,6 +70,12 @@ void Link::_exit_tree() {
 
 void Link::_physics_process(double delta) {
     if (Engine::get_singleton()->is_editor_hint()) {
+        return;
+    }
+    
+    // if fdm is deleted, link is useless
+    if (fdm_node == nullptr) {
+        set_process_mode(ProcessMode::PROCESS_MODE_DISABLED);
         return;
     }
 
@@ -85,10 +100,8 @@ void Link::_physics_process(double delta) {
         autopilot->poll() == Error::OK &&
         autopilot->get_status() == StreamPeerTCP::STATUS_CONNECTED)
     {
-          send_data();
-          if (fdm_node) {
-            recv_data();
-          }
+        send_data();
+        recv_data();
     }
 }
 
