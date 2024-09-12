@@ -1,5 +1,6 @@
 #include "link.hpp"
 
+#include <chrono>
 #include <jsbsim/fdm.hpp>
 #include <jsbsim/utils.hpp>
 
@@ -114,7 +115,7 @@ void Link::send_gps_data() const {
     const auto propagate = fdm->GetPropagate();
     mavlink_message_t msg;
     mavlink_hil_gps_t state;
-    state.time_usec = fdm->GetSimTime() * 1e6;
+    state.time_usec = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     state.lat = propagate->GetLatitudeDeg() * 1e7;
     state.lon = propagate->GetLongitudeDeg() * 1e7;
     state.alt = propagate->GetAltitudeASLmeters() * 1e3;
