@@ -1,7 +1,6 @@
 #include "register_types.hpp"
 
 #include "mavlink/link.hpp"
-#include "jsbsim/fdm.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -15,7 +14,6 @@ void initialize_rotasim_module(ModuleInitializationLevel p_level) {
   }
 
   ClassDB::register_class<Link>();
-  ClassDB::register_class<FDM>();
 }
 
 void uninitialize_rotasim_module(ModuleInitializationLevel p_level) {

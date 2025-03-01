@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_mbyd5"]
 [ext_resource type="PackedScene" uid="uid://d34q48gofhsdp" path="res://terrain/yunuseli.glb" id="4_4vgy6"]
-[ext_resource type="PackedScene" uid="uid://vvbh0i4qlpw5" path="res://scenes/Rascal110.tscn" id="4_hof4q"]
+[ext_resource type="PackedScene" uid="uid://vvbh0i4qlpw5" path="res://scenes/Rascal110.tscn" id="4_aaoui"]
 [ext_resource type="Material" uid="uid://bmiin5oioerah" path="res://new_standard_material_3d.tres" id="5_m2oyn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nn1sx"]
@@ -70,4 +70,5 @@ transform = Transform3D(-5.7578e-08, -0.707107, 0.707107, 0, -0.707107, -0.70710
 mesh = SubResource("BoxMesh_3gfk6")
 skeleton = NodePath(".")
 
-[node name="Talon" parent="." instance=ExtResource("4_hof4q")]
+[node name="Talon" parent="." instance=ExtResource("4_aaoui")]
+model_name = "my_aircraft"

@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+
+<system name="Effectors">
+  <property value="9473.0"> fcs/maxRPM </property> <!-- Max motor RPM -->
+  <property value="2125.0"> fcs/maxPwr_Watt </property> <!-- Max motor power -->
+  <property value="15.9155"> fcs/lagMotor </property> <!-- lag = tau_s / dt -->
+  <property value="0.0"> fcs/throttle-input </property> <!-- Throttle input -->
+
+  <channel name="Electronic Speed Conrollers">
+    <!-- First order lag on RPM measure -->
+    <lag_filter name="fcs/filtMeas_rpm">
+      <input> propulsion/engine/propeller-rpm </input>
+      <c1> fcs/lagMotor </c1>
+    </lag_filter>
+
+    <!-- Change in RPM:
+    deltaCmd_rpm = cmdEsc_nd * maxRPM + filtMeas_rpm -->
+    <fcs_function>
+      <function name="fcs/deltaCmd_rpm">
+        <difference>
+          <product>
+            <property> fcs/throttle-input </property>
+            <property> fcs/maxRPM </property>
+          </product>
+          <property> fcs/filtMeas_rpm </property>
+        </difference>
+      </function>
+    </fcs_function>
+
+    <!-- Power Command:
+    deltaPower_Watt = torqReq * (deltaCmd_rpm * rpm2rps)
+    cmdPower_Watt = deltaPower_Watt + pwrReq_Watt -->
+    <fcs_function>
+      <function name="fcs/cmdPower_Watt">
+        <sum>
+          <product>
+            <property> propulsion/engine/propeller-sense </property>
+            <property> -propulsion/engine/propeller-torque-ftlb </property>
+            <property> fcs/deltaCmd_rpm </property>
+            <value> 0.104719 </value> <!-- rpm to rad/sec -->
+          </product>
+          <product>
+            <property> propulsion/engine/propeller-power-ftlbps </property>
+            <value> 1.3558179 </value> <!-- ft-lbs/s to Watts -->
+          </product>
+        </sum>
+      </function>
+    </fcs_function>
+
+    <!-- Convert power command to normalized throttle Command -->
+    <fcs_function>
+      <function name="fcs/cmdPower_nd">
+        <quotient>
+          <property> fcs/cmdPower_Watt </property>
+          <property> fcs/maxPwr_Watt </property>
+        </quotient>
+      </function>
+    </fcs_function>
+
+    <actuator name="fcs/throttle-cmd-norm">
+      <input> fcs/throttle-input </input>
+      <delay> 0.0205 </delay>
+      <clipto>
+        <min>0.01</min> <!-- Min command shouldn't be zero, commands would be stuck at zero -->
+        <max>1.0</max>
+      </clipto>
+    </actuator>
+  </channel>
+</system>

@@ -3,9 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://cgejd412bxd7l" path="res://scenes/talon.glb" id="1_6jvw8"]
 [ext_resource type="Script" path="res://addons/orbit_camera/orbit_camera.gd" id="2_unu5c"]
 
-[node name="Talon" type="FDM"]
+[node name="Talon" type="Link"]
+lockstep_enabled = true
 model_name = "Talon"
 init_name = "initGrnd.xml"
+metadata/_edit_lock_ = true
 
 [node name="CameraAnchor" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.825389, 0.564564, 0, -0.564564, 0.825389, 0, 1.91412, 3.5086)
@@ -19,9 +21,6 @@ ANCHOR_NODE_PATH = NodePath("..")
 
 [node name="talon2" parent="." instance=ExtResource("1_6jvw8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.144174, 0)
-
-[node name="Link" type="Link" parent="."]
-fdm_node = NodePath("..")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.204295, -0.492756)

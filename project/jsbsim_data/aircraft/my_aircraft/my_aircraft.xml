@@ -1,0 +1,418 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="http://jsbsim.sourceforge.net/JSBSim.xsl"?>
+
+<fdm_config name="my_aircraft" version="2.0" release="ALPHA"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="http://jsbsim.sourceforge.net/JSBSim.xsd">
+
+ <fileheader>
+  <author> AeromatiC++ version 3.3.21 </author>
+  <filecreationdate> 15 Feb 2025 </filecreationdate>
+  <version>$Revision: 1.80 $</version>
+  <description> Models a my_aircraft. </description>
+ </fileheader>
+
+<!--
+  File:     my_aircraft.xml
+  Input parameters:
+    Output directory                   : /Users/szripr
+    Create a subdirectory?             : yes
+    Overwrite?                         : yes
+    Aircraft name                      : my_aircraft
+    Use dedicated system files?        : yes
+    Select a system of measurement     : yes
+    Type of aircraft                   : 0
+    Stall speed VS1 (clean, no flaps)  : 15
+    Maximum takeoff weight             : 5.50
+    Empty weight                       : 4.50
+    Inertia Ixx                        : 0.2437
+    Inertia Iyy                        : 0.0490
+    Inertia Izz                        : 0.2923
+    Length                             : 0.31	
+    Select a wing shape                : 2
+    Wing span                          : 1.8
+    Wing area                          : 0.54
+    Wing aspect ratio                  : 5.855
+    Wing taper ratio                   : 0.5
+    Wing root chord                    : 0.40
+    Wing incidence                     : 6.00
+    Wing dihedral                      : 0.00
+    Wing sweep (quarter chord)         : 0.00
+    Htail area                         : 0.00
+    Htail arm                          : 0.68
+    Vtail area                         : 0.16
+    Vtail arm                          : 0.55
+    Propulsion                         : yes
+    Engine name                        : my_engine
+    Number of engines                  : 1
+    Engine layout                      : 2
+    Engine type                        : 4
+    Engine power                       : 2.30
+    Maximum engine rpm                 : 8800.00
+    Thruster name                      : my_propeller
+    Propeller diameter                 : 0.40
+    Is the propeller fixed pitch?      : yes
+    Landing Gear                       : yes
+    Is landing gear retractable?       : no
+    Nose or tail wheel type            : 2
+    Is this a taildragger?             : yes
+    Flaps                              : no
+    Spoilers                           : no
+    Chute                              : no
+
+  Specifications:
+    name:          my_aircraft
+    type:          Single engine Glider, Small Commuter
+    stall speed:   46.80 km/h
+    max weight:    4.50 kg
+    Fuselage: 
+     length:        1.30 m
+     diameter:      1.37 m
+     finess ratio:  0.95
+    wing: 
+     span:         1.50 m
+     area:         0.38 m2
+     mean chord:   0.26 m
+     aspect ratio: 6.00:1
+     taper ratio:  0.43:1
+     incidence:    5.00 degrees
+     dihedral:     0.00 degrees
+     sweep:        0.00 degrees
+     t/c:          0.42 %
+
+    no. engines:   1
+    engine type:   Electric Engine
+    engine layout: aft fuselage
+
+    gear type:     taildragger
+    steering type: fixed
+    retractable?:  no
+
+  Outputs:
+    wing loading:       117.70 N/m2
+     - thickness ratio: 0.42%
+    payload:            -0.67 kg
+    CL-alpha:           8.69 per radian
+    CL-0:               0.12
+    CL-max:             1.14
+    CD-0:               nan
+    K:                  0.04
+    Mcrit:              0.70
+
+    min. turn radius    9.51 m
+    max. turn rate:     1.50 deg/s
+-->
+
+ <metrics>
+   <wingarea  unit="M2"> 0.38     </wingarea>
+   <wingspan  unit="M" > 1.50     </wingspan>
+   <wing_incidence unit="DEG"> 5.00 </wing_incidence>
+   <chord     unit="M" > 0.26     </chord>
+   <htailarea unit="M2"> 0.06     </htailarea>
+   <htailarm  unit="M" > 0.68     </htailarm>
+   <vtailarea  unit="M2">0.16     </vtailarea>
+   <vtailarm  unit="M" > 0.55     </vtailarm>
+   <location name="AERORP" unit="M">
+     <x> 0.62     </x>
+     <y> 0.00     </y>
+     <z> 0.00     </z>
+   </location>
+   <location name="EYEPOINT" unit="M">
+     <x> 0.17     </x>
+     <y> -0.46    </y>
+     <z> 1.14     </z>
+   </location>
+   <location name="VRP" unit="M">
+     <x>     0.0 </x>
+     <y>     0.0 </y>
+     <z>     0.0 </z>
+   </location>
+ </metrics>
+
+ <mass_balance>
+   <ixx unit="KG*M2">  3.00     </ixx>
+   <iyy unit="KG*M2">  2.00     </iyy>
+   <izz unit="KG*M2">  1.00     </izz>
+   <emptywt unit="KG" >  4.50     </emptywt>
+   <location name="CG" unit="M">
+     <x> 0.64     </x>
+     <y> 0.00     </y>
+     <z> -0.03    </z>
+   </location>
+   <pointmass name="Payload">
+    <description> -0.67 kg should bring model up to entered max weight </description>
+    <weight unit="KG"> -0.33 </weight>
+    <location name="POINTMASS" unit="M">
+     <x> 0.64     </x>
+     <y> 0.00     </y>
+     <z> -0.03    </z>
+   </location>
+  </pointmass>
+ </mass_balance>
+
+ <propulsion>
+   <engine file="Power25">
+    <feed> 0 </feed>
+
+    <thruster file="my_propeller">
+     <sense> 1 </sense>
+     <location unit="M">
+       <x>    -0.22 </x>
+       <y>     0.00 </y>
+       <z>     0.00 </z>
+     </location>
+     <orient unit="DEG">
+       <pitch>     0.00 </pitch>
+        <roll>     0.00 </roll>
+         <yaw>     0.00 </yaw>
+     </orient>
+    </thruster>
+  </engine>
+ </propulsion>
+
+
+ <ground_reactions>
+
+  <contact type="BOGEY" name="TAIL">
+    <location unit="M">
+      <x>     1.18 </x>
+      <y>     0.00 </y>
+      <z>    -0.00 </z>
+    </location>
+    <static_friction>  0.80 </static_friction>
+    <dynamic_friction> 0.50 </dynamic_friction>
+    <rolling_friction> 0.02 </rolling_friction>
+    <spring_coeff  unit="N/M">     144.81 </spring_coeff>
+    <damping_coeff unit="N/M/SEC"> 72.40 </damping_coeff>
+    <max_steer unit="DEG"> 0.00 </max_steer>
+    <brake_group> NONE </brake_group>
+    <retractable> 0 </retractable>
+  </contact>
+
+  <contact type="BOGEY" name="LEFT_MAIN">
+    <location unit="M">
+      <x>     0.1 </x>
+      <y>    -0.14 </y>
+      <z>    -0.26 </z>
+    </location>
+    <static_friction>  0.80 </static_friction>
+    <dynamic_friction> 0.50 </dynamic_friction>
+    <rolling_friction> 0.02 </rolling_friction>
+    <spring_coeff  unit="N/M">     144.81 </spring_coeff>
+    <damping_coeff unit="N/M/SEC"> 72.40 </damping_coeff>
+    <max_steer unit="DEG">0</max_steer>
+    <brake_group> LEFT </brake_group>
+    <retractable> 0 </retractable>
+  </contact>
+
+  <contact type="BOGEY" name="RIGHT_MAIN">
+    <location unit="M">
+      <x>     0.1 </x>
+      <y>     0.14 </y>
+      <z>    -0.26 </z>
+    </location>
+    <static_friction>  0.80 </static_friction>
+    <dynamic_friction> 0.50 </dynamic_friction>
+    <rolling_friction> 0.02 </rolling_friction>
+    <spring_coeff  unit="N/M">     144.81 </spring_coeff>
+    <damping_coeff unit="N/M/SEC"> 72.40 </damping_coeff>
+    <max_steer unit="DEG">0</max_steer>
+    <brake_group> RIGHT </brake_group>
+    <retractable> 0 </retractable>
+  </contact>
+
+  <contact type="STRUCTURE" name="LEFT_WING">
+    <location unit="M">
+     <x>     0.64 </x>
+     <y>    -0.75 </y>
+     <z>    -0.03 </z>
+    </location>
+   <static_friction>  1 </static_friction>
+   <dynamic_friction> 1 </dynamic_friction>
+    <spring_coeff  unit="N/M">     144.81 </spring_coeff>
+    <damping_coeff unit="N/M/SEC"> 72.40 </damping_coeff>
+  </contact>
+
+  <contact type="STRUCTURE" name="RIGHT_WING">
+    <location unit="M">
+     <x>     0.64 </x>
+     <y>     0.75 </y>
+     <z>    -0.03 </z>
+    </location>
+   <static_friction>  1 </static_friction>
+   <dynamic_friction> 1 </dynamic_friction>
+    <spring_coeff  unit="N/M">     144.81 </spring_coeff>
+    <damping_coeff unit="N/M/SEC"> 72.40 </damping_coeff>
+  </contact>
+
+ </ground_reactions>
+
+ <system file="Conventional Controls.xml"/>
+ <system file="Landing Gear.xml"/>
+
+ <flight_control name="FCS: my_aircraft">
+
+ </flight_control>
+
+ <aerodynamics>
+  <axis name="LIFT">
+
+    <!-- Lift above 0.85 and below -0.85 is generalised -->
+    <function name="aero/force/Lift_alpha">
+      <description>Lift due to alpha</description>
+
+
+      <product>
+          <property>aero/qbar-psf</property>
+          <property>metrics/Sw-sqft</property>
+          <table>
+            <independentVar lookup="row">aero/alpha-deg</independentVar>
+            <tableData>
+              -4  0.186
+	            -3  0.265
+	            -2  0.345
+	            -1  0.424
+ 	            0  0.503
+	            1  0.581
+	            2  0.660
+	            3  0.738
+	            4  0.815
+	            5  0.892
+	            6  0.968
+	            7  1.044
+	            8  1.119
+	            9  1.193
+	            10  1.226
+	            11  1.339
+            </tableData>
+          </table>
+      </product>
+    </function>
+
+    <function name="aero/force/Lift_pitch_rate">
+        <description>Lift due to pitch rate</description>
+        <product>
+          <property>aero/qbar-psf</property>
+          <property>metrics/Sw-sqft</property>
+          <property>velocities/q-aero-rad_sec</property>
+          <property>aero/ci2vel</property>
+          <value> -0.5 </value>
+        </product>
+      </function>
+
+      <function name="aero/force/Lift_alpha_rate">
+        <description>Lift due to alpha rate</description>
+        <product>
+           <property>aero/qbar-psf</property>
+           <property>metrics/Sw-sqft</property>
+           <property>aero/alphadot-rad_sec</property>
+           <property>aero/ci2vel</property>
+           <value> -1.5 </value>
+        </product>
+      </function>
+
+    <function name="aero/force/Lift_elevator">
+       <description>Lift due to Elevator Deflection</description>
+       <product>
+           <property>aero/qbar-psf</property>
+           <property>metrics/Sw-sqft</property>
+           <property>fcs/elevator-pos-rad</property>
+           <value> -0.78 </value>
+       </product>
+    </function>
+  </axis>
+
+  <axis name="DRAG">
+    <!-- CD0 is based on fuselage, wing, horizontal- en vertical tail -->
+    <!-- CD for gear (fixed and retractable) is defined below         -->
+    <function name="aero/force/Drag_minimum">
+       <description>Minimum drag</description>
+       <product>
+          <property>aero/qbar-psf</property>
+          <property>metrics/Sw-sqft</property>
+          <value> 0.3 </value>
+       </product>
+    </function>
+
+    <function name="aero/force/Drag_alpha">
+       <description>Drag due to alpha</description>
+       <product>
+          <property>aero/qbar-psf</property>
+          <property>metrics/Sw-sqft</property>
+          <table>
+            <independentVar lookup="row">aero/alpha-deg</independentVar>
+            <tableData>
+             -5.0	0.038266
+	            -4.5	0.043249
+	            -4.0	0.048232
+	            -3.5	0.053215
+	            -3.0	0.058198
+	            -2.5	0.063182
+    	            -2.0	0.068165
+	            -1.5	0.073148
+    	            -1.0	0.078131
+	            -0.5	0.083114
+	              0.0	0.088097
+  	              0.5	0.093080
+  	              1.0	0.098063
+  	              1.5	0.103046
+	              2.0	0.108029
+	              2.5	0.113012
+                      3.0	0.117995
+     	              3.5	0.122978
+	              4.0	0.127961
+   	              4.5	0.132944
+      	              5.0	0.137927
+	              5.5	0.142910
+    	              6.0	0.147893
+ 	              6.5	0.152876
+
+
+            </tableData>
+          </table>
+       </product>
+    </function>
+
+    <function name="aero/force/Drag_elevator">
+       <description>Drag due to Elevator Deflection</description>
+       <product>
+           <property>aero/qbar-psf</property>
+           <property>metrics/Sw-sqft</property>
+           <abs><property>fcs/elevator-pos-rad</property></abs>
+           <value> 0.0333333333333333 </value>
+       </product>
+    </function>
+
+    <function name="aero/force/Drag_gear">
+       <description>Drag due to gear</description>
+         <product>
+           <property>aero/qbar-psf</property>
+           <property>metrics/Sw-sqft</property>
+           <value> 0.0040 </value>
+         </product>
+    </function>
+  </axis>
+
+  <axis name="SIDE">
+    <function name="aero/force/Side_beta">
+       <description>Side force due to beta</description>
+       <product>
+           <property>aero/qbar-psf</property>
+           <property>metrics/Sw-sqft</property>
+           <value> -0.0066666666666667 </value>
+       </product>
+    </function>
+  </axis>
+ </aerodynamics>
+
+  <system file="px4_default_mag_sensor.xml"/>
+  <system file="px4_default_baro_sensor.xml"/>
+  <system file="px4_default_imu_sensor.xml"/>
+  <system file="px4_default_gps_sensor.xml"/>
+  <system file="Effectors.xml"/>
+</fdm_config>
+
+
+
+
+
