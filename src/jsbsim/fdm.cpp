@@ -19,16 +19,16 @@ FDM::FDM(String p_model_name, String p_init_name, double p_frequency, uint32_t p
   UtilityFunctions::print("Loading model ", model_name, ".");
 
   // set custom path for JSBSim data
-  fdm_exec.SetRootDir(utils::jsb_path_from_gd_string("res://jsbsim_data/aircraft"));
-  fdm_exec.SetAircraftPath(SGPath(""));
-  fdm_exec.SetEnginePath(SGPath("Engines"));
-  fdm_exec.SetSystemsPath(SGPath("Systems"));
+  fdm_exec.SetRootDir(utils::jsb_path_from_gd_string("res://jsbsim_data"));
+  fdm_exec.SetAircraftPath(SGPath("aircrafts"));
+  fdm_exec.SetEnginePath(SGPath("engines"));
+  fdm_exec.SetSystemsPath(SGPath("systems"));
   fdm_exec.DisableOutput();
 
   bool result = fdm_exec.LoadModel(
-    SGPath(""),
-    SGPath("Engine"),
-    SGPath("Systems"),
+    SGPath("aircrafts"),
+    SGPath("engines"),
+    SGPath("systems"),
     model_name.utf8().get_data());
   if (!result) {
     UtilityFunctions::print("Failed to load model");

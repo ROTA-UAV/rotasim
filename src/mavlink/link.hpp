@@ -29,8 +29,8 @@ public:
     void set_init_name(const String& p_init_name);
     String get_init_name() const;
 
-    void set_fdm_frequency(double p_frequency);
-    double get_fdm_frequency() const;
+    void set_fdm_time(double p_frequency);
+    double get_fdm_time() const;
 
     void set_loop_time(double p_loop_time);
     double get_loop_time() const;
@@ -64,9 +64,9 @@ private:
     String model_name{};
     String init_name{};
     double loop_time{4.0};
-    double fdm_frequency{1000.0};
+    double fdm_time{1.0};
     double speed{1.0};
-    uint32_t num_of_fdm_iter{static_cast<uint32_t>(loop_time / (1000.0 / fdm_frequency) * speed)};
+    uint32_t num_of_fdm_iter{static_cast<uint32_t>(loop_time / fdm_time * speed)};
 
     Thread* thread{};
 

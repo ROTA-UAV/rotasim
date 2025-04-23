@@ -41,8 +41,8 @@ void Link::_bind_methods() {
     ClassDB::add_property("Link", PropertyInfo(Variant::STRING, "init_name"), "set_init_name", "get_init_name");
 
     // frequency
-    ClassDB::bind_method(D_METHOD("get_fdm_frequency"), &Link::get_fdm_frequency);
-    ClassDB::bind_method(D_METHOD("set_fdm_frequency", "p_frequency"), &Link::set_fdm_frequency);
+    ClassDB::bind_method(D_METHOD("get_fdm_frequency"), &Link::get_fdm_time);
+    ClassDB::bind_method(D_METHOD("set_fdm_frequency", "p_frequency"), &Link::set_fdm_time);
     ClassDB::add_property("Link", PropertyInfo(Variant::FLOAT, "fdm_frequency"), "set_fdm_frequency", "get_fdm_frequency");
 
     // loop time
@@ -74,10 +74,10 @@ void Link::_ready() {
 
 void Link::run() {
     UtilityFunctions::print("Thread started.");
-    while (true) {
-        // get starting time
-        auto start = std::chrono::high_resolution_clock::now();
+    // get starting time
+    auto start = std::chrono::high_resolution_clock::now();
 
+    while (true) {
         if (autopilot.is_null()) {
             if (server->is_connection_available()) {
                 if (!connect()) {
@@ -156,7 +156,7 @@ bool Link::connect() {
         return false;
     }
 
-    fdm = std::make_unique<FDM>(model_name, init_name, fdm_frequency, num_of_fdm_iter);
+    fdm = std::make_unique<FDM>(model_name, init_name, 1000.0 / fdm_time, num_of_fdm_iter);
     fdm_exec = &fdm->get_fdm_exec();
 
     {
@@ -468,20 +468,20 @@ String Link::get_model_name() const { return model_name; }
 void Link::set_init_name(const String &p_init_name) { init_name = p_init_name; }
 String Link::get_init_name() const { return init_name; }
 
-void Link::set_fdm_frequency(double p_frequency) {
-    fdm_frequency = p_frequency;
-    num_of_fdm_iter = loop_time / (1000.0 / fdm_frequency) * speed;
+void Link::set_fdm_time(double p_frequency) {
+    fdm_time = p_frequency;
+    num_of_fdm_iter = loop_time / fdm_time * speed;
 }
-double Link::get_fdm_frequency() const { return fdm_frequency; }
+double Link::get_fdm_time() const { return fdm_time; }
 
 void Link::set_loop_time(double p_loop_time) {
     loop_time = p_loop_time;
-    num_of_fdm_iter = loop_time / (1000.0 / fdm_frequency) * speed;
+    num_of_fdm_iter = loop_time / fdm_time * speed;
 }
 double Link::get_loop_time() const { return loop_time; }
 
 void Link::set_speed(double p_speed) {
     speed = p_speed;
-    num_of_fdm_iter = loop_time / (1000.0 / fdm_frequency) * speed;
+    num_of_fdm_iter = loop_time / fdm_time * speed;
 }
 double Link::get_speed() const { return speed; }
