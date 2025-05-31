@@ -29,7 +29,7 @@ public:
     void set_init_name(const String& p_init_name);
     String get_init_name() const;
 
-    void set_fdm_time(double p_frequency);
+    void set_fdm_time(double p_fdm_time);
     double get_fdm_time() const;
 
     void set_loop_time(double p_loop_time);
@@ -58,14 +58,15 @@ private:
     bool is_connected{false};
     bool lockstep_enabled{false};
     int64_t tick_count{0};
+    std::chrono::high_resolution_clock::time_point start{};
 
     std::unique_ptr<FDM> fdm{};
     JSBSim::FGFDMExec* fdm_exec{};
     String model_name{};
     String init_name{};
-    double loop_time{4.0};
-    double fdm_time{1.0};
-    double speed{1.0};
+    double loop_time{4.0}; // interval between two simulation updates
+    double fdm_time{1.0}; // interval between two fdm updates
+    double speed{1.0}; // speed of the simulation
     uint32_t num_of_fdm_iter{static_cast<uint32_t>(loop_time / fdm_time * speed)};
 
     Thread* thread{};

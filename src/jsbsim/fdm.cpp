@@ -51,15 +51,15 @@ FDM::FDM(String p_model_name, String p_init_name, double p_frequency, uint32_t p
 }
 
 void FDM::step() {
-  copy_to_jsbsim();
   fdm_exec.Run();
-  copy_from_jsbsim();
 }
 
 void FDM::run() {
+  copy_to_jsbsim();
   for (uint32_t i = 0; i < num_of_iters; ++i) {
     step();
   }
+  copy_from_jsbsim();
 }
 
 void FDM::copy_to_jsbsim() {

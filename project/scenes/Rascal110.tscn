@@ -7,6 +7,7 @@
 lockstep_enabled = true
 model_name = "Talon"
 init_name = "initGrnd.xml"
+speed = 4.0
 metadata/_edit_lock_ = true
 
 [node name="CameraAnchor" type="Node3D" parent="."]

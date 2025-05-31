@@ -71,4 +71,3 @@ mesh = SubResource("BoxMesh_3gfk6")
 skeleton = NodePath(".")
 
 [node name="Talon" parent="." instance=ExtResource("4_aaoui")]
-model_name = "my_aircraft"

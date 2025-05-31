@@ -40,10 +40,10 @@ void Link::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_init_name", "p_init_name"), &Link::set_init_name);
     ClassDB::add_property("Link", PropertyInfo(Variant::STRING, "init_name"), "set_init_name", "get_init_name");
 
-    // frequency
-    ClassDB::bind_method(D_METHOD("get_fdm_frequency"), &Link::get_fdm_time);
-    ClassDB::bind_method(D_METHOD("set_fdm_frequency", "p_frequency"), &Link::set_fdm_time);
-    ClassDB::add_property("Link", PropertyInfo(Variant::FLOAT, "fdm_frequency"), "set_fdm_frequency", "get_fdm_frequency");
+    // fdm time
+    ClassDB::bind_method(D_METHOD("get_fdm_time"), &Link::get_fdm_time);
+    ClassDB::bind_method(D_METHOD("set_fdm_time", "p_fdm_time"), &Link::set_fdm_time);
+    ClassDB::add_property("Link", PropertyInfo(Variant::FLOAT, "fdm_time"), "set_fdm_time", "get_fdm_time");
 
     // loop time
     ClassDB::bind_method(D_METHOD("get_loop_time"), &Link::get_loop_time);
@@ -74,10 +74,10 @@ void Link::_ready() {
 
 void Link::run() {
     UtilityFunctions::print("Thread started.");
-    // get starting time
-    auto start = std::chrono::high_resolution_clock::now();
 
     while (true) {
+        auto start = std::chrono::high_resolution_clock::now();
+
         if (autopilot.is_null()) {
             if (server->is_connection_available()) {
                 if (!connect()) {
@@ -110,10 +110,12 @@ void Link::run() {
             }
         }
 
-        ++tick_count;
         // wait for the rest of the time
-        auto loop_end = start + (1ms * loop_time);
-        this_thread::sleep_until(loop_end);
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+        auto sleep_time = std::chrono::milliseconds(static_cast<int64_t>(loop_time)) - elapsed;
+        this_thread::sleep_for(sleep_time);
+        ++tick_count;
     }
 }
 
@@ -171,6 +173,7 @@ bool Link::connect() {
     }
 
     is_connected = true;
+    start = std::chrono::high_resolution_clock::now();
     return true;
 }
 
@@ -468,8 +471,8 @@ String Link::get_model_name() const { return model_name; }
 void Link::set_init_name(const String &p_init_name) { init_name = p_init_name; }
 String Link::get_init_name() const { return init_name; }
 
-void Link::set_fdm_time(double p_frequency) {
-    fdm_time = p_frequency;
+void Link::set_fdm_time(double p_fdm_time) {
+    fdm_time = p_fdm_time;
     num_of_fdm_iter = loop_time / fdm_time * speed;
 }
 double Link::get_fdm_time() const { return fdm_time; }
